@@ -1,0 +1,68 @@
+less
+
+什么是css预处理
+CSS 预处理器定义了一种新的语言，其基本思想是，用一种专门的编程语言，为 CSS 增加了一些编程的特性，将 CSS 作为目标生成文件，然后开发者就只要使用这种语言进行编码工作。
+CSS 预处理器用一种专门的编程语言，进行 Web 页面样式设计，然后再编译成正常的 CSS 文件，以供项目使用。CSS 预处理器为 CSS 增加一些编程的特性，无需考虑浏览器的兼容性问题”
+
+学习网址
+lesscss.cn
+less.bootcss.com
+
+注释
+// 模板注释,只存在在这个文件中
+/**/ css注释,会保留到编译后的css文件中
+
+编译
+lessc 文件名.less > 文件名.css
+
+在html中链入less
+1.直接引入编译好的css;
+2.引入原生的less文件,会出现编译时间耗时,推荐第一种,用于开发可用第二种
+<link rel="stylesheet/less" href="less/main.less">
+<script src="./lib/less/less.min.js">
+这段代码要放在body底部,确保比link更快生效
+且要用http方式访问页面
+</script>
+
+安装出现问题
+1.记得把F盘下的less里面的npm里的东西安装到user下的appdata的roaming里面
+2.出现的无法保存为css问题需要重新启动计算机
+3.在sublime实时编译可以使用插件less2css进行实时编译,使用less 进行代码高亮.
+
+
+语法
+嵌套变成子元素,生成伪元素要加&
+
+/*声明变量的方式*/
+@width:200px;
+/*编码*/
+.container {
+	width: @width;
+	.row {
+		a {
+			color: @widht;
+			&:hover{
+				color:skyblue;
+			}
+		}
+	}
+}
+/*类的编译*/
+/*括号中的内容为参数,参数中冒号后面的内容为默认值,如果没有传参,就使用缺省值*/
+con(@radius:5px){
+	border-radius: @radius;
+}
+/*两种调用方式*/
+#header {
+	/*不传参时括号可加可不加;*/
+	con(); 
+}
+#header {
+	con(10px);
+}
+
+/*引入文件*/
+/*被引入的文件,以 _ 开头,表示部分的,如 _p.less*/
+/*格式*/
+@imput url('_p.less');
+/*被引文件可引用主文件的定义的变量*/

@@ -1,0 +1,349 @@
+html css 规范 width 1366 height 768
+<!-- 移动HTML的基本格式 -->
+<meta name="viewport"
+	  content="height = device-height,
+	  		   width = device-width,
+	  		   initial-scale = 1.0,
+	  		   minimum-scale = 1.0,
+	  		   maximum-scale = 1.0,
+	  		   user-scalable = no"/>
+<!-- 长宽 缩放 最大/小缩放倍数 是否进行 -->
+三种响应式布局的实现方式（检测屏幕宽度更换样式表）
+1.css media query（媒体查询。通过把px换成百分比实现 ）
+
+当用户设备宽度大于980的时候，用于pc界面
+当用户设备宽度在620-979之间，用PAD界面
+当用户设备宽度系小于619的时候，用于pc界面
+
+css3媒体查询：media 属性就是媒体查询的的属性
+min-width(>=)
+max-width(<=)
+eg.media=“(min-widht:600px) and (max-widht:599px)”
+从ie9开始兼容
+常见属性
+device-width,device-height 屏幕宽高
+width,height 渲染窗口的宽高
+orientation设备方向
+resolution 设备分辨率
+外联样式表 在link加标签 
+media="only screen and (max-width:480px)"
+内联 
+<style>
+	@media screen and (min-width: 480px)
+</style>
+或者
+<style>
+	@media (min-width: 768px){
+
+	}
+	@media (min-width: 992px){
+
+	}
+	@media (min-width: 1200px) and() or (){
+	//多条件
+	}
+</style>
+
+2.bootstrap
+用少量代码即可实现多终端的页面
+必定引入
+<meta name="viewport" content="width=device-width" initial-scale="1.0">
+<link rel="stylesheet" href="css/bootstrap.min.css" >
+[if it IE 9]
+<script src="https://oss.maxdcn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+3.响应式布局（通过js）
+
+a.设备检测
+使用device.js
+<script type="text/javascript">
+if(device.mobile()){
+	//如果是手机的操作
+	window.location="";
+}else if(device.ipad()){
+	//如果是ipad的操作
+}else{
+	//是台式机的操作
+}
+</script>
+//不要用window.onload=function(){},延时调用，会浪费流量去加载完再跳转。
+devide的常见方法
+device.portrait()检测设备是否是竖直的
+device.landscape()检测设备是否是水平的
+device.mobile() 检测设备是否是手机
+device.ipad) 检测设备是否是ipad
+device.iphone()检测设备是否是苹果手机
+device.android()检测设备是否是是安卓机
+device.tablet() 检测设备是否是大屏幕手机（7寸以上）
+
+实现跳转的方法
+window.location="url"
+
+b.通过js检测页面宽度
+document.documentElement.clientWidth(兼容ie6)
+//一旦重置界面即重新加载让屏幕变换尺寸的时候，随时输出宽度。
+window.onresize=function(){
+	var myhe=document.getElementGyId("shuchu");
+	myh1.innerHTML=document.documentElement.clientWidth;
+}
+window对象 onload 加载完成；onresize调整尺寸；nscroll 滚动滚轮；
+
+c.约束视口
+//苹果的分辨率1136*640；三星的分辨率是1920*1080
+//通过id和named为viewport的meta元标记来约束视口，写在content里面，用逗号隔开。
+<meta name="viewport"
+	  id="viewport"
+	  content="height = device-height,
+	  		   width = device-width,（各种手机屏幕的宽度大约在320到380之间）
+	  		   initial-scale = 1.0,
+	  		   minimum-scale = 1.0,
+	  		   maximum-scale = 1.0,
+	  		   user-scalable = no"/>
+4.流式布局
+百分比数值只能出现在width，padding，margin上面。而且都相对于父级元素来说。
+a.box-sizing:border-box;
+此时外面的边框以内减的形式存在，而不以外扩的形式存在。解决了盒子宽高以百分比出现时，边框引起的一系列问题
+box-sizing 其他属性：padding-box 出现在内边距
+					content-box (默认) 外扩
+ie8才开始兼容
+b.max-width; 
+  min-width;
+  ie7才开始兼容
+渐变背景background:-webkit-linear-gradien(-90deg,#ccc,white);
+
+使得双数右靠。
+ ul li:nth-child(2n){
+	width:49.5%;
+	margin-right:0;
+}
+
+焦点轮播图
+下载swipe.js库,专门用来制作能够用手指滑动的焦点轮播图的。
+步骤：1.视口
+	  2.布局
+		<div id="只有第一个能随便起第二个一定要用swipe-wrap">
+			<div class='swipe-wrap'>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+	  3.放置css,复制库中index.html 中的<style>样式，然后改样式的名称为自己的命名
+	  此时页面是白色的
+	   放置js,复制script的语句，然后把getelenmentbyid()里的MYSWIPE改成自己命名的ID
+	   约束所有图片的尺寸 width:100%
+	   4.callback:function(index,element){
+	   	//小圆点的样式有与无
+	   	//小圆点可点击
+	   }
+	   //回调函数 index为当前所在的图片序号，序号从零开始
+	   5.排他操作
+	   让一个元素拥有样式，让其他元素没有样式
+	   $(.xiaoyuandian li).addClass("cur").siblings().removeClass("cur")；
+	   6.点击圆点滑动事件
+	   $(.xiaoyuandian li).click=fuinction(){
+	   	mySwipe.slide($(this).index);
+	   	}
+
+4.实战项目中css和js的注意事项
+4.1 css清除所有样式
+/*reset css*/
+	*，
+	::before,
+	::after{
+		/*选择所有标签*/
+		margin:0;
+		padding:0;
+		/*清除移动端默认的点击高亮效果，transparent为透明*/
+		-webkit-tap-highlight-color: transparent;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	body{
+		font-size: 14PX;
+		font-family: "MicroSoft YaHei",sans-serisf;/*设备默认字体*/
+
+	}
+	a {
+		color:#333;
+		text-decoration:none;
+	}
+	a:hover {
+		text-decoration:none;
+	}
+	ul,ol {
+		list-style: none;
+	}
+	input {
+		border:none;
+		outline:nont;
+		/*清除移动端默认样式*/
+		-webkit-appearance:none;
+	}
+	/*common css*/
+	.f_left{
+		float:left;
+	}
+	.f_right{
+		float:right;
+	}
+	.clearfix::before,
+	.clearfix::after{
+		content: "";
+		height: 0;
+		line-height: 0;
+	}
+
+	/*主题盒子*/
+	.layout{
+		width:100%;
+		max-width: 640px; /*设计图的原因，不让他放大*/
+		min-width:300px; /*为了更好地布局*/
+		margin：0 auto;
+	}
+4.2 结构的细节
+/*小键盘 enter 改变成搜索键*/
+<form action="#">
+<input type="search" placeholder="提示站位">
+</form>
+4.3 /*所有icon_开头的从class都带有这样的属性*/
+[class^="icon_"]{
+	background:url("../jimages.sprites.png") no-repeat;
+	/*原图宽高皆为400px，利用压缩一倍的方法解决图片像素毛边的问题*/
+	background-size:200px 200px;
+}
+
+5.条件注释
+5.1 如果满足条件则运行，不满足即视为注释
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+5.2 注释（多采用这种注释）
+<!-- 头部导航-->
+<header></header>
+<!-- /头部导航 -->
+6.script的位置放置
+  建议放于body底部加快渲染速度
+
+7 bootstrap
+7.1 bootstrap 搭建的框架骨架
+├ web                  项目所在目录
+└─┬ css                自己写的css
+  ├ fonts              存放使用到的字体文件
+  ├ js                 自己写的js
+  ├ lib                从第三方下载来用的库(只用不改)
+  ├ img                使用到的图片文件
+  ├ favicon.ico        站点字体图标
+  └ index.html         入口文件
+   写文档需要用到制表符的结构
+
+完成html初始结构
+lang="zh-CN";
+meta:vp 完成视口的
+meta:compat 使用最新的ie浏览器进行渲染解决兼容问题的emmet快捷输入法
+link:favicon 站点小图标 <link rel="shortcut.icon" type="image/x-icon" href="路径">
+
+引入css,jquery,bootstrap文件(bootstrap依赖于jquery,jquery必引)
+
+设置body默认字体,以保证在中文开发过程众用微软雅黑开发
+body {
+	font-family:"Helvetica Neue",
+				 Helvetica,
+				 Microsoft Yahei,
+				 WenQuanYi Micro Hei,
+				 sans-serif;
+}
+
+构建页面空结构(大体上的所有结构)
+
+完成顶部同栏
+.container 将里面的存放在一个固定宽度且居中的版心中
+栅格系统
+.row 包裹
+col-i-num xs手机 sm平板 md桌面显示器 lg桌面显示器
+hidden-sx  在某种屏幕下隐藏
+visible-xx 在某种屏幕下显示
+visible-xx-xx 最后一个是block,inline-block,inline
+
+轮播图在一个较小的屏幕下展示超管的图实现居中两种方式
+1.background-position:center center;
+2.绝对定位 居中布局;
+
+
+
+background-size 四个值
+lenght             180px 180px
+percentage         90% 90%
+cover              撑满盒子,无视溢出(以短边对齐等比例缩放)
+contain            包裹在盒子里,无视大量留白(以长边对齐等比例缩放)
+
+图片响应式
+1.各种终端需要正常显示图片
+2.移动端应该使用(体积)更小的图片
+为了小图时等比例缩放,小图使用img,其他情况下使用背景
+实现
+data-img-lg ="大图路径" data-img-xs="小图路径" 通过$().data('img-xx')得到
+$(window).width();
+$().css("backgroundImg",'url("'+ +'")');
+$(window).on('resize',resize).trigger('resize');//trigger立即触发这个事件
+
+一边固定宽度,一边自适应的布局思路:让固定宽度的一边浮动,自适应的一边margin left/right固定宽度的宽度
+active 后因为边框而出现文字抖动的问题解决:让边框一直有,但是border-color:transparent
+
+引用的字体如果不能正常显示,需在里面加font-family:你外面引用的字体
+
+做半圆镂空效果内阴影会因为水平偏差出现镂空不真实,采用水平偏移量为零.
+box-shadow:0px 1px 5px #c0c0c0 inset 
+
+h1标签在页面里有且仅有一个,h标签有优先级保证数量上h1<=h2<=h3<=h4...
+
+css同一容器下面两个宽度相加为100%的盒子渲染后显示为两行的原因是写代码时换行的空白字符,只需在容器中加上font-size = 0;即可解决,而jquery在动态添加盒子时会去掉空白字符,所以有一些布局会因此产生抖动;
+
+使用data-toggle:"tabs", a href = "#id" 来灵活应用tab栏 
+
+设置类导航栏组件的横向滚动条思路
+1.给ul设置一个容器,这个容器有横向滚动条
+2.动态设置ul的宽度,宽度是根据内容大小决定的 width = sun(li.width)
+
+.each遍历以后的element为js 对象,转为jq用$(element)
+
+获取元素自身宽度有两种方式 js:element.clientWidth() jq:$(element).width();往往js方式更加高效
+
+使得溢出的元素能够横向滚动 overflow-x:scroll;在js 中设置,并且要在宽度和大于屏幕宽度的情况下实现,不然滚动条会一直出现
+
+做ul li a 样式的思路:给ul去margin,padding,list-style 给li 只是浮动,用li+li 搭配border-left 方式加边框,其他的样式全部在a里面写
+
+手机移动端滑动轮播图滚动思路:
+1.识别手指在元素上滑动的方向
+2.通过方向出发上一张,下一张
+	- $(a).trigger('click')
+	- .carousel('pre'/'next') 原生的bootstrap触发上下一张的方式
+
+
+7.2 bootstrap 中常用的类名及其作用
+hidden-sm hidden-xs 小于992px自动隐藏
+visible-md visible-lg 大于992px可见
+.pull-left 左边浮动
+.pull-right 右浮动
+bootstrap p标签默认有10px的下边距 margin-bottom:0;
+使用padding腾出空间代替 line-height 避免响应时换行导致的两行距过大
+bootstrap 里面默认添加的active 不能删除,否则会报错
+.fade 设置淡入淡出效果 默认选中的加 fade in
+把自己改的bootstrap样式,放在自己写的css中的bootstrap扩展里面,先改名后调整
+.text-left .text-right .text-center 三种文字对齐
+bootstrap 的tooltip 插件需要初始化才可使用
+bootstrap 由于采用的盒模型widht包括padding和border,在出现元素换行的情况下作出增大容器宽度的选择
+栅格系统 .col-md-offset-3 偏移三份
+让内容块居中 center-block
+
+自定义bootstrap 
+1.使用less 修改bootstrap下的变量values.less,然后编译bootstrap.less;
+2.在bootstrap 官网进行
+
+em vs rem
+em单位箱单于当前容器的 font-size,1em 等于当前容器定义的字体大小
+rem 为root em ,为根节点即html的em值,可以通过更改html节点的font-size 更改全局的rem值
+
+v4学习网站 v4.bootcss.com

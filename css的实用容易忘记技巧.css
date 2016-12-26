@@ -1,0 +1,538 @@
+css的实用容易忘记技巧
+
+/*创建项目时需要base.css,globle.css*/
+
+1.导航栏文字在元素居中
+line-hight：元素的高px;
+text-align: center;
+display:inline;
+2. css清除所有样式
+/*reset css*/
+	*，
+	::before,
+	::after{
+		/*选择所有标签*/
+		margin:0;
+		padding:0;
+		/*清除移动端默认的点击高亮效果，transparent为透明*/
+		-webkit-tap-highlight-color: transparent;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+	}	
+	box-sizing两个值 content-box 为设置的宽即为内容宽 边框padding向外扩展
+					 border-box 为设置的宽为盒子的宽,边框padding向内收缩
+	body{
+		font-size: 14PX;
+		font-family: "MicroSoft YaHei",sans-serisf;/*设备默认字体*/
+
+	}
+	a {
+		color:#333;
+		text-decoration:none;
+	}
+	a:hover {
+		text-decoration:none;
+	}
+	ul,ol {
+		list-style: none;
+	}
+	input {
+		border:none;
+		/*清除可能出现的边框样式*/
+		outline:none;
+		/*清除移动端默认样式*/
+		-webkit-appearance:none;
+	}
+	/*common css*/
+	.f_left{
+		float:left;
+	}
+	.f_right{
+		float:right;
+	}
+	.clearfix::before,
+	.clearfix::after{
+		content: "";
+		height: 0;
+		line-height: 0;
+		display：table;
+	}
+
+	/*主题盒子*/
+	.layout{
+		width:100%;
+		max-width: 640px; /*设计图的原因，不让他放大*/
+		min-width:300px; /*为了更好地布局*/
+		margin：0 auto;
+	}
+3. 结构的细节
+/*小键盘 enter 改变成搜索键*/
+<form action="#">
+<input type="search" placeholder="提示站位">
+</form>
+4.3 /*所有icon_开头的从class都带有这样的属性*/
+[class^="icon_"]{
+	background:url("../jimages.sprites.png") no-repeat;
+	/*原图宽高皆为400px，利用压缩一倍的方法解决图片像素毛边的问题*/
+	background-size:200px 200px;
+}
+4.清除浮动的三种方法
+4.1 clear:both;
+	overflow:hidden;
+4.2 :after{
+	clear:both;
+	content:"";
+	height:0;
+	line-height:0;
+	display:block;
+	overflow:hidden;
+}
+4.3  .类{
+	zoom:1;
+	//仅仅是ie可用
+}
+5.字体综合写格式
+font: 字体加粗(font-weight:bold即为700，尽量用数值，normal为正常) 字号/行高 字体名称（加""） /*必须有字号和字体*/
+font-style:normal;字体不倾斜
+6.常见的小装饰的标签
+S del 删除线
+I em 倾斜
+U ins 下划线
+sub 下标签
+上面标签的取消 text-decoration:none;
+一般使用i标签,i标签最简单最小,最轻量级,搭配 font-style:normal;
+7.定位四种,子绝父相
+	positon:static;   静态定位，标准流；
+			absolute;
+			reletive;
+			fixed;	  固定定位
+7.1 相对定位
+让元素的位置相对于原来的位置进行微调的定位
+不脱标,(老家留坑)占据原来的位置.(形影分离)真实占据的位置才具有margin等属性
+position:relatibe;
+left:50px; /*往右边走50px*/
+top:50px;	/*往下边走50px*/
+7.2 绝对定位
+脱标,使元素不再具有标准文档流的性质如行内元素等,可以设置宽高
+参考点:相对于页面左上角定位,bottom为相对于浏览器首屏的底边进行定位,而不是页面.注意只有首屏,卷动之后会随首屏卷动而移动;
+以盒子为参考点: 一个绝对定位的元素如果父辈元素中也出现了定位了的元素,那么以父辈这个元素为参考点
+			   要以最近的定位了的祖先元素为参考点,不一定是父亲;
+			   不一定是相对定位,任何定位都可以,只不过脱标的定位使得页面不稳固,一般子相父绝;
+			   绝对定位的元素无视参考盒子的padding
+7.2.1 定位脱标后的居中:
+/*第一种*/
+position:absolute;
+left:50%;
+ margin-left:盒子宽度的一半;
+ (记得写top值)
+/*第二种 针对不知尺寸*/
+.element {
+    width: 600px; height: 400px;
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);    /* 50%为自身尺寸的一半 */
+}
+/*第三种 里哟纪念馆margin的auto特性*/
+.element {
+    width: 600px; height: 400px;
+    position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;    /* 有了这个就自动居中了 */
+}
+7.3 固定定位
+相对于浏览器窗口的定位,页面滚动位置不变;
+
+8.浮动3中
+float：none;/left;/right;
+9.锚点
+一个a标签如果name属性（或者id属性），成为页面中的一个锚点
+在另一个a标签中href="#name/id值"可以跳转。
+跨页面锚点
+href="另一个页面的网址.html#name/id值"（href="#"回到顶部）
+10.显示/隐藏
+display:none / display:block
+visibility:hidden / visibility:visible 
+区别：display隐藏不占位置
+	  visibility隐藏仍然占位置
+10.换图片
+  document.body.style.backgroundImage ="url(images/...png)"
+11.遮罩层
+/*css代码*/
+.mask {
+	width:100%;
+	height:100%;
+	display: none;
+	background: rgba(0,0,0,.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index:999;
+}
+.box {
+	width: 400px;
+	height: 250px;
+	display: none;
+	position: fixed;
+	background-color: #fff;
+	top: 50%;
+	left: 50%;
+	z-index: 1000;
+}
+/*script代码*/
+login.onclick =function(){
+	box.style.display ="none";
+	mask.style.display ="none";
+}
+mask.onclick = function(){
+	mask.style.display ="none";
+}
+12 鼠标光标
+cursor：pointer; 白手套
+cursor:text; 文字光标
+cursor:move; 十字光标
+cursor：default; 小白
+13 消除字间距
+13.1 设置父元素font-size : 0;
+	 重新设置子元素的font-size;
+13.2 letter-spacing : 负数;
+13.3 word-spacing : 负数;
+	此为单词间距，英文变现为 i am 中文以空格为界
+14 两个li间出现间距是因为代码书写换行导致生成空格
+	让li变成一行有两种方法
+	float：left;
+	或者 display：inline-block;
+15 表格
+	合并行和列单元格
+   <table>	
+	<thead>
+		<th rowspan="2">表头</th>
+		<th colspan="2">表头</th>
+/*		<th>表头</th>
+*/	</thead>
+	<tbody>
+/*		<td>table-data</td>
+*/		<td>table-data</td>
+		<td>table-data</td>
+	</tbody>
+
+   </table>
+15.1 表格样式(必写)
+	border-collapse:collapse;
+	border-spacing:0;
+16 符号选择器
+	, /* 并集选择器 */
+	空格 /* 后代选择器 */
+	> /* 子代选择器 */
+	+ /* 紧邻选择器 ，后面的紧邻的兄弟元素,列表多用这种实现border如 */
+	  ul>li+li{
+	  /*实现第一个li后面的所有li都有样式*/
+	}
+	~ /* 兄弟选择器 ，选择的是该元素后面的所有兄弟元素*/
+16.2 通配选择器
+	e[attr = ""];   /**/
+	e[attr ~= ""];	/*选择的是空格隔开的元素*/
+	e[attr |= ""];	/*选择的是"-"隔开的元素，或者空格隔开的元素*/
+	e[attr *= ""];	/*选择的是包含有这个字符的元素*/
+	e[attr ^= ""];	/*选择的是开头包含有这个字符的玄素*/
+	e[attr $= ""];	/*选择的是结尾包含有这个字符的元素*/
+17 伪类选择器
+	/*相对于父元素*/
+	/*用于查找n大于等于1，作为系数的时候可以等于0，寻找的式子可以写成2n+1等*/
+	:first-child;
+	:last-child;   /*:last-child(n);查找倒数第几个下面的type也一样*/ 
+	:nth-child(n); /*第n个子元素*/
+	:only-child;   /*选取唯一的一个子元素*/
+	/*相对于本身*/
+	:first-of-type;	/*第一个这种类型的元素*/
+	:last-of-type;
+	:nth-of-type(n); /*相对于自身，第n个这种类型的元素*/
+	:only-of-type;
+18 伪元素选择器
+	::selection
+	/*元素一开始的时候第一个和最后一个，在元素内部*/
+	::before()
+	::after();
+19 hsla(色相(0~360),饱和度（0~100%）,灰度(0~100%),透明度（0~1）);
+20 文字样式
+	text-shadow:左偏移,上偏移，模糊度，颜色;
+	/*文字溢出成省略号的方法3个必写*/
+	text-overflow:ellipsis; /*文字溢出成省略号*/
+	white-spacing:nowrap; /*强制文字不换行*/
+	overflow:hidden;
+	/*和上面三个方法组成移动端的文字溢出效果*/
+	display:-webkit-box;
+	-webkit-line-clamp:2;  /*最后要省略的行数*/
+	-webkit-box-orient:vertical;
+	text-indent:2em; /*汉字首航空两格*/
+21 圆角矩形
+   圆角值大于边框值，内边角变成圆角，否则为方角
+
+
+
+22 font详解
+color属性的值快捷键是c，然后tab
+字号大小：
+font-size:40px;
+font就是“字体”，size就是“尺寸”。px是“像素”。
+单位必须加，不加不行。
+快捷键是fz，然后tab
+背景颜色快捷键是bgc，然后tab
+加粗：
+font-weight
+font是“字体” weight是“重量”的意思，bold粗。快捷键是fwb，然后tab
+不加粗：
+font-weight: normal;
+快捷键是fwn，然后tab
+斜体：
+font-style: italic;
+的快捷键是fsi，然后tab
+不斜体：
+font-style: normal;
+快捷键是fsn，然后tab
+下划线：
+text-decoration: underline;
+decoration就是“装饰”的意思。
+快捷键是tdu，然后tab
+没有下划线：
+text-decoration:none;
+快捷键是tdn，然后tab
+/*font综合写*/
+font:字号/行高 "字体";
+行高可以用百分比,基于字号的百分比
+font-family
+中文一般为"微软雅黑","宋体","黑体"
+英文为"Arial", "Times New Roman"
+中文字体用英文表示Microsoft YaHei,SimSun(宋体)
+字体的引号加否? 如果名字中间有空格,加引号以兼容,否则可不加
+
+23 css继承性和层叠性
+23.1 继承性
+color,text开头，line开头，font开头的属性都可以继承到子代的元素
+23.2 层叠性以权重决定样式的归属，是css处理兼容的能力，并没有任何兼容性问题
+计算选中同一个元素的id,类,标签的个数，以1.1.1 的格式做比较
+其中一个id= 255类=255个标签
+在权重相等的情况下，元素的样式取决于排在后面的样式
+无法生效的样式称为被层叠了
+继承而来的样式不管是什么权重都为零，如果都没直接选择到该元素，就近原则（谁选的离元素的层级近）
+并集选择器下只需要拆分在计算即可
+权重一样时标签内的样式取决于css中的顺序而不是标签内类名顺序
+！important标记提高权重，权重为无穷大，important无法颠覆就近原则
+font-size: 60px !important;
+
+24 行内元素垂直居中
+/*单行文字居中*/
+line-height:等于盒子高度;
+/*多行文字居中*/
+使得padding-top属性的值等于 盒子高度减去文本总行高/2
+该盒子高度要减去这个值一保持盒子总高度不变
+
+25 伪类
+用于表示一个标签不同状态的类
+a 标签有四个伪类,必须按顺序写否则失效,全部写或者只写hover
+a:link{}
+a:visited{}
+a:hover{}
+a:active{}
+a为行内样式,且a不具有继承性
+/*去除a样式固定代码*/
+a:link {
+ text-decoration: none;
+}
+a:visited {
+ color: #fff;
+ text-decoration: none;
+}
+a:hover {
+ text-decoration: none;
+}
+26 背景专题
+background-images:url(/);
+多个背景
+background-image:url() no-repeat left top,url() 重复 方位 方位, 颜色;
+background-repeat: no-repeat;
+				 : repeat-x;
+				 : repeat-y;
+background-position: 右移px 左移px;
+/*position 可以用像素或者单词进行描述 
+左右 left/center/right
+上下 top/center/bottom*/
+/*居中 background-position:center center;*/
+/*用于搞定精灵图又称雪碧图*/
+background-attachment:fixed;
+/*固定背景图片*/
+background-size:contain/cover/百分比像素 百分比/auto
+contain 会使背景根据盒子的最小边进行同比收缩,展示出全部图片
+cover 会使背景根据盒子的最大边进行缩放,另一边同比缩放,部分图片溢出
+background-clip:border-box/content-box/padding-box 以border或者content或者padding为界限裁切出背景
+background-origin:padding-box(默认)//；设置背景图的定位原点
+27 z-index详解
+只针对定位了的元素,相对,绝对,固定,无法对浮动的元素起作用
+默认的z-index为0;
+没有写z-index 的两个定位了的元素,谁在HTML文档中靠后谁在上面,定位的压住没定位的
+28 盒子阴影 box-shadow
+box-shadow:右偏移 左偏移 模糊度 [扩展量] 颜色
+模糊度为一个颜色在一定距离内进行一个渐变到透明的过程
+模糊度不能为负数,模糊度和偏移量可以相加
+偏移量和扩展也是相加的,扩展的正负用于抵消或者增加偏移量
+内阴影 insert box-shadow:insert 偏移量 模糊度 [扩展量] 颜色
+29 边框图片
+border-image-slice:离上的距离 离右 离下 离左;/*边框的图片的划分点九图,四个值相同写一个*/
+border-image-width:;/*边框图片的宽度*/
+border-image-repeat:round(平铺)/repeat(重复)/stretch(拉伸);
+30 渐变
+线性,径向,重复渐变
+30.1 线性渐变
+background-image:linear-gradient(方向,颜色(颜色后可空格加百分比));
+background-image:linear-gradient(90deg,yellowgreen 10%,blueshy 15%);
+方向 一用角度,以y轴的负无穷为0度,顺时针旋转
+	 二用关键词,to top(向上渐变), to left top(向左上渐变)
+百分比 颜色后加的百分比为颜色的节点,后面颜色的百分比如果比前面颜色的小,则会出现在前面颜色的百分比处直接无渐变变后面颜色
+30.2 径向渐变
+backgrou-image:radial-gradient(120px 120px at center center , yellow,bule);
+at之前 的为径向渐变的x,y扩展值,一样只写一个,可不写
+at之后 为径向渐变的起始x,y坐标,可位置关键词,可像素
+, 之后为颜色
+30.3 重复渐变
+background-image:repeating-linear-gradient();
+background-image:repeating-radial-gradient();
+30.4 利用raga(0,0,0,0-0.9) 进行扁平化的组件制作
+31 多列布局
+-webkit-column-count:分成的列数
+-webkit-rolumn-width:每列的宽度 当列数*宽度大于盒子总宽会自动设置列数
+-webkit-column-gap:列与列的宽度
+-webkit-bolume-rule:分割线的宽度 虚实 颜色;
+-webkit-column-span:all 使得该元素的那一行没有列
+32 盒子伸缩布局
+display:flex;
+33过渡 transition 过度四属性
+变化前 {
+	样式...
+	transition:all ease 1s;
+}
+变化后 {
+	要变化的样式;
+}
+transition-property 设置过渡属性
+transition-duration 设置过渡时间
+transition-timing-function 设置过渡速度
+transition-delay 设置过渡延时
+34动画 animation 动画八属性
+/*动画相比过渡可以处理更多细节,可以拆分成更多步骤*/
+animation-name:动画名字;
+animation-duration:持续时间s;
+animation-delay:延迟秒数s;
+animation-iteration-count:infinite; 无限重复
+animation-timing-function:linear; 这个五参数linear/ease/ease-in(加速)/ease-out(减速)/ease-in-out(先加速后减速)
+animation-diretion:alternate; 运动反方向
+animation-play-state:pause; 动画暂停
+animation-fill-mode:forwards; 动画完成后状态
+/*动画的具体变化*/
+@keyframes 动画名字 {
+	0% {
+		/*第一次变化*/
+	}
+	/*百分比变化*/
+	100% {
+		/*最后的变化*/
+	}
+}
+/*如果只有两个动画*/
+/*@keyframes 动画名字{
+	from ()
+	to()
+}*/
+要有动画的物体 {
+	其他样式
+	animation:动画名字 ease 1s;
+}
+34.1 复杂动画的实现
+	 a.通过from{width:0;}to{width:特定宽度;}配合steps()做出逐个打印效果
+	 b.通过透明度opacity 的变化配合其他变化
+	 c.灵活应用animation的delay属性来完成PPT效果
+35 转换 transform 转化四形式
+旋转,缩放,移动,倾斜
+transform:rotate( deg);
+transform:scale(x,y) x或y或者可以是小数
+transform:translate(x,y) 
+transform:skew( deg);
+组合 transform:rotate() transform( deg) etc;
+设置原点 写于改变前样式里面
+transform-origin:x,y;
+36 自定义字体,网页嵌入字体
+有字库网站,iconfont
+自己打字,下载特定几个字的文字文件,然后复制生成的代码即可
+记得改路径
+有针对性地下载生成的字体
+使用font-family:调用
+36.1 字体图标
+font awesome网站
+icomoon网站
+icosvg
+36.2 传统的字体嵌套
+	@font-face{
+	font-family:'fontname';
+	src:url('') format(''),	
+		url('') format(''),	
+		url('') format(''),	
+		url('') format(''),	
+	}
+	format格式
+	eot : embedded-opentype
+	scg :svg
+	ttf:truetype
+	woff:woff
+37 css实现选中与不选中
+   E:target{
+   	//选中的状态
+   }
+   E:not(:target){
+   	//不选中的状态
+   }
+38 文字不被选中
+body{
+-moz-user-select:none;/*火狐*/
+-webkit-user-select:none;/*webkit浏览器*/
+-ms-user-select:none;/*IE10*/
+-khtml-user-select:none;/*早期浏览器*/
+user-select:none;
+}
+user-select有2个值（none表示不能选中文本，text表示可以选择文本）
+IE6-9还没发现相关的CSS属性
+//IE6-9
+document.body.onselectstart=document.body.ondrag=function(){
+returnfalse;
+}
+39 横线
+39.1 hr
+<hr style="height:10px;border:none;border-top:10px groove skyblue;" />
+border-top:10px groove skyblue;
+height:2px;是hr的高度
+border:none;是没有边框
+border-top:2px dotted #185598;是设置横线的样式
+dotted  虚线
+groove  上颜色
+skyblue   下颜色
+39.2 div
+<div style="
+width:800px;
+height:1px;
+margin:0px auto;
+padding:0px;
+background-color:#D5D5D5;
+overflow:hidden;"></div>
+overflow:hidden;很重要，如果不加这句的话，在IE6下高度将会被拉的很开。
+
+40 立体效果-- perspective(视距) 属性
+1.为子元素加立体透视效果,所以写于父亲身上
+2.只影响3d元素
+3.设为none则无效果
+4.值越小,效果越明显,无穷大或者0等同于none
+5.经常与translateZ搭配使用 
+position:absolute;
+/*原理两个平面垂直相交,减去一半的距离*/
+transform:rotateX(-90deg) translateZ(平面高度的一半);
+40.1 控制消失点的位置
+定义于本身上,默认50% 50%
+perspective-origin:200px 100px;
+40.2 transform-stylez
+所有子元素以2d 值为flat 展示,或者3d 值为preserve-3d让子元素在3d空间展示;
+
+50 pre 元素可定义预格式化的文本。被包围在 pre 元素中的文本通常会保留空格和换行符。

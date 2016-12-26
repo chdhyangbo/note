@@ -1,0 +1,156 @@
+案例开发流程和要点
+1.页面开发流程:两步走
+a.初始化
+静态页面的实现
+b.交互(前端开发工程师)
+
+3.静态页面的实现的约定
+每个版块用注释"版块开始 /版块结束"标志好
+多人合作一个项目,样式通过iD去限定
+尽可能使用直接子代选择器 ">"
+css样式中要分公共样式,各个版块的样式分别注释明
+
+4框架搭建时出现问题汇总
+	1.切记引进的script里面不能加任何代码,不然引进的文件和写的代码都会失效
+	2.在extend 的第二个参数不能是function,用用{}表示
+	3.两个for循环嵌套变量名相同会出现死循环	
+
+
+5.框架
+//获取页面传来的参数
+simpleQuery:function(){
+	var params = window.location.search;//params:?参数一,参数二....
+	var arr = params.substring(1).split(",");
+	return arr;
+},
+/*生成一个区间内的随机数*/
+random:function(begin,end){
+	return Math.floor((end-begin)*Math.random)+begin;
+},
+// 得到数组的最值
+getMaxNumber:function(arr){
+ return Math.max.apply(null,arr);
+},
+getMinNumber:function(arr){
+	return Math.min.apply(null,arr);
+}
+// 实现两个数组的合并
+combineArray:function(arr1,arr2){
+	var arr=Array.prototype.push.apply(arr1,arr2);
+	return arr;
+}
+//数组合并原生
+pushArray:function(arr1,arr2){
+	var arr2len = arr2.length;
+	for(i=0;i<arr2len;i++){
+		arr1.push(arr2[i]);
+	}
+	return arr1;
+}
+extend:function(tar,sou){
+	
+	for(i in sou){
+		tar[i]=sou[i];
+	}
+	return tar;
+}
+
+6.Css框架:用以实现CSS的增删改查
+	例如jquery,代表性语句为 .css(key,value);
+
+	原生css访问css的两种方式
+	doms[0].style.color = 'pink';
+	doms[0].style['color'] = 'pink';
+	第一种对封装框架一点用也咩有.第二种为键值对方式,我们只能用第二种
+	上面的 两种方法都只能查询到静态的已经写好的css样式,动态添加的如js添加类则无法得到,下面可得到
+	var style = window.getComputedStyle('元素','伪类');
+
+	高度和宽度专题
+	元素的高度和宽度两种
+		有滚动条的   .scrollWidth(); .scrollHeight();
+		没有滚动条的 .clientWidth(); .clientHeight();
+	窗口的高度和宽度(文档可视窗口) 
+		有滚动条的  document.body.scrollHeight; document.body.scrollWidth;
+		无滚动条的  document.documentElement.clientHeight; document.documentElement.clientHeight;
+	屏幕的高度和宽度 window.screen.height(); window.screen.width();
+
+	位置专题
+	得到元素在文档中的位置信息 offset
+	.offset().top 得到左上角的y坐标值
+	.offset().left 得到左上角的x坐标值
+	// 相对父元素的位置
+	.position().top;
+	.position().left;
+
+7.属性框架 attr
+	jquery中常用的有 .attr(); removeAttr(); .addClass(); .removeClass();
+	原生获取属性,用 .属性名 获取与赋值,其中class要用className
+8.内容框架 
+	jquery中使用 .html();
+	原生获取内容,用 .innerHTML = ''
+9.缓存框架
+	缓存是提高性能最核心的武器
+	缓存的三种形式
+	直接放在内存中 //当关闭网页缓存的数据即释放
+	通过cookie //4kb 不安全
+	html5 本地存储缓存 //cookie 可能被浏览器禁止,随着移动端的发展,需要更大的存储体积和安全
+10.运动框架
+	jquery用animate({json格式})实现多元素的变化
+	原生的做运动的元素一定得是position:absolute;
+	必定运用 .offsetLeft 格式取的数值不带单位,这是经常用的获取元素坐标的方法
+	动画时间进程和动画距离进程 通过百分比知道他们一一对应
+	动画时间进程的公式
+	step(要走的距离)/pass- now (要耗费的时间) = (总路程)/(总时间)
+	即 step = 总路程*tween(动画事件进程 = 耗费时间/总时间)
+	停止条件
+	距离到达
+	时间足够 tween >= 1
+	五种运动
+	匀速运动,减速运动,加速运动,重力运动,弹力运动
+11.适配器 adapter
+   将入口的数据转化为我们需要的数据
+12.组件:封装好的功能
+13.面向对象进行封装框架
+	   思路:1.面向使用者提炼出入口参数,让使用者使用方便
+	   		2.提炼出接口(属性和方法),写好框架,运行的部门,一般分为运行部(运行功能,对外的接口),数据部(适配器,转化数据等),后勤部(释放内存,安全);
+	   	    3.辨别公有还是私有,私有则外部不会调用到,开头加 _ ;
+	   	    4.实现接口,分部门完成代码 
+	   	    5.调试错误
+	   	    6.完美法则(性能,内存,安全压缩等优化)
+	   	    7.交给其他开发成员使用
+	   	    8.反馈问题,bug,优化
+	   	    9.再完善
+14.封装框架基础-6个
+	1.零污染:解决污染的方式
+				1.函数
+					定义子函数,使污染源成为局部变量
+				2.对象
+					定义不同的对像,来保存全局变量,即将全局变量升级为对象的属性
+				3.立即函数
+					是包含了函数定义和函数调用两部分的函数
+					(function(){
+						//立即函数格式
+					})(); //多立即函数要加分号
+					// 立即函数的传参在后面的小括号传
+					// (function(x,y){
+					// 		console.log(x+y);
+					// })(2,3);
+					立即函数可以有返回值,可以肤质给另外一个变量
+					立即函数的特殊写法执行效率高,但是可读性差
+
+				4.立即函数+闭包
+					在立即函数中获取值有三个方法
+					1.将值赋予一个window的变量,如果需要得到多个值,为了防止出现大量的全局变量,用json格式获取,并且返回json
+					2.将值赋予一个全局变量
+					3.return这个值 
+						必须用一个变量接收立即函数 var a = ()();
+						return{} 一般返回一个json 对象
+						通过变量.方法/属性返回 a.sth;
+				5.命名空间模块化
+	2.用户体验
+	2.模块化
+	3.可扩展 :插件
+	4.链式访问
+		让添加的每个方法都return this;使得方法可以连续调用
+	5.完美性
+	6.代码优化 安全 性能 压缩 自动化压缩 自动化优化 自动化打包 混淆

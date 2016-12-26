@@ -1,0 +1,13 @@
+1.从网上链接到reset.css以重置样式。并且不再reset样式表中进行改动。
+2.letter-spacing来设置字与字间距_字符间距离，字体间距css样式
+3.text-indent设置抬头距离css缩进
+4.我们可以用:<p style="line-height:100%"> 来设定一段文字内的行距
+4.如果盒子下面的浮动出现盒子和盒子的细线或者排榜问题，可能是可以重置一下字体样式。
+5.:nth-child(n) 选择器匹配属于其父元素的第 N 个子元素，不论元素的类型。Odd 和 even 是可用于匹配下标是奇数或偶数的子元素的关键词（第一个子元素的下标是 1。使用公式 (an + b)。描述：表示周期的长度，n 是计数器（从 0 开始），b 是偏移值。
+6.页脚：版权，版权声明，友情链接，分享图标
+7.background: #444 url(../img/pcbg.jpg);
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+这五个可使背景图片占满全屏不重复，不可点击且固定

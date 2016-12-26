@@ -1,0 +1,14 @@
+兼容问题汇总
+1.出现兼容问题的原因
+浏览器公司并未完全按照html5标准进行研发
+js语言一直在发展升级快,浏览器出于稳定性,支持无法快速同步
+
+on 兼容ie6
+function on(id,type,fn){
+	var dom = document.getElementById(id);
+	if(dom.addEventListener){
+		dom.addEventListener(type,fn,false)
+	}else{
+		 dom.attachEvent('on'+type,fn);
+	}
+}
